@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import time
 import datetime
 import minimalmodbus
@@ -36,13 +37,14 @@ def time_now():
     now = datetime.datetime.now().strftime("%H:%M:%S")
     now = str(now)
     return(now)
-
 def write_to_csv():
     
     logger = open("datalogger2.txt", "a")
-    logger.write(date_now() + "," + time_now() + "," + str( temperature() ) + "," + str( humidity() ) + "\n")
+    try:
+        logger.write(date_now() + "," + time_now() + "," + str( temperature() ) + "," + str( humidity() ) + "\n")
+    except:
+         pass
     logger.close()
      
 while True:
     write_to_csv()
-
