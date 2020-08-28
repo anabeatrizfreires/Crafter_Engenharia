@@ -6,6 +6,8 @@ int valor_A0;
 bool valor_D0;
 int valor_A1;
 bool valor_D1;
+int LED0 = 7;
+int LED1 = 6;
 
 
 void setup ()
@@ -15,7 +17,8 @@ void setup ()
   pinMode (IN_D0, INPUT);
   pinMode (IN_A1, INPUT);
   pinMode (IN_D1, INPUT);
-  pinMode (LED_BUILTIN, OUTPUT);
+  pinMode (LED0, OUTPUT);
+  pinMode (LED1, OUTPUT);
 }
 
 void loop ()
@@ -27,7 +30,9 @@ void loop ()
   valor_D0 = digitalRead (IN_D0);
   Serial.print ("D0: ");
   Serial.println(valor_D0);
-  delay(1000);
+  delay(2000);
+
+  Serial.print("\n");
 
   valor_A1 = analogRead (IN_A1);
   Serial.print ("A1: ");
@@ -36,15 +41,34 @@ void loop ()
   valor_D1 = digitalRead (IN_D1);
   Serial.print ("D1: ");
   Serial.println (valor_D1);
-  delay(1000);
-  
-  if (valor_D0 == 0 || valor_A0 < 200 || valor_D1 == 0 || valor_A1 <200)
+  delay(2000);
+  Serial.print("\n");
+
+  if (valor_D0 == 0 || valor_A0 <= 200 && valor_D1 == 0 || valor_A1 <= 200)
   {
-    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(LED0, HIGH);
+    digitalWrite(LED1, HIGH);
+    delay (1000);
+  }
+  
+  else if (valor_D0 == 0 || valor_A0 <= 200 && valor_D1 == 1 || valor_A1 > 200)
+  {
+    digitalWrite(LED0, HIGH);
+    digitalWrite (LED1, LOW);
+    delay (1000);
+  }
+  
+  else if (valor_D1 == 0 || valor_A1 <= 200 && valor_D0 == 1 || valor_A0 > 200 )
+  {
+    digitalWrite(LED1, HIGH);
+    digitalWrite (LED0, LOW);
+    delay (1000);
   }
   
   else
   {
-    digitalWrite (LED_BUILTIN, LOW);
+    digitalWrite (LED0, LOW);
+    digitalWrite (LED1, LOW);
+    delay (1000);
   }
 }
