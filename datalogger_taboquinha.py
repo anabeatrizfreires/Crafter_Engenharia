@@ -296,3 +296,4 @@ while True:
     medidor7()
     medidor8()
     medidor9()
+    time.sleep(60*6)
