@@ -10,7 +10,9 @@ NUMERO_DE_COMISSIONAMENTOS = 19
 ENDERECO_INICIAL_MEDIDORES = 201
 ENDERECO_INICIAL_INVERSORES = 301
 
-MEDIDOR_CONFIG {
+#dicionario medidor
+MEDIDOR_CONFIG =
+{
     "tensao_AB":103,
     "tensao_BC": 104,
     "tensao_CA": 105,
@@ -32,8 +34,26 @@ MEDIDOR_CONFIG {
     "energia_ativa_exportada":133
 }
 
-INVERSOR_CONFIG = {
-    "energia_diaria": 132
+#dicionario inversor
+INVERSOR_CONFIG = 
+{
+    "energia_diaria": 132,
+    "energia_total": 134,
+    "energia_parcial": 136,
+    "energia_mensal": 140
+    "tensao_rede": 144,
+    "corrente_rede": 146,
+    "potencia_rede": 148,
+    "frequencia": 150,
+    "potencia_1": 152,
+    "tensao_1": 154,
+    "corrente_1": 156,
+    "potencia_2": 158,
+    "tensao_2": 160,
+    "corrente_2": 162,
+    "temperatura": 164,
+    "resistencia_isolacao": 168
+    
 }
 
 medidores = []
@@ -43,6 +63,7 @@ def date_now():
     today = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
     return str(today)
 
+#gera arquivo para cada equipamento
 def collect_generico(tipo, comissionamento, i):
     file = open("{tipo}{}.txt".format(i), "a")
     file.write("{}, ".format(date_now()))
