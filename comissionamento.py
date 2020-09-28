@@ -9,6 +9,9 @@ import os
 NUMERO_DE_COMISSIONAMENTOS = 19
 ENDERECO_INICIAL_MEDIDORES = 201
 ENDERECO_INICIAL_INVERSORES = 301
+vir = #valor referencia corrente
+vfr = #valor referencia tensao
+vpr = #valor referencia potencia
 
 #Dicionario medidor
 MEDIDOR_CONFIG =
@@ -79,6 +82,28 @@ def collect_generico(tipo, comissionamento, i):
     else: 
             for nome_medicao, registrador in config.items():
             medicao = medidor.read_float(registrador, 3, 2)
+            
+            if nome_medicao == tensao_AB or tensao_BC or tensao_CA:
+                tensao_fase_fase = (medicao * vfr)/16384
+                
+            if nome_medicao == corrente_A or corrente_B or corrente_C or corrente_neutro:
+                corrente =  (medicao * vir)/16384
+                
+            if nome_medicao == potencia_A or potencia_B or potencia_C or potencia_total:
+                potencia = (medicao * vpr)/16384
+                
+            if nome_medicao == fator_potencia_A or fator_potencia_B or fator_potencia_C or fator_potencia_total:
+                potencia = (medicao * 1)/16384
+                
+            if nome_medicao == frequencia:
+                frequence = (medicao * 100)/16384
+             
+            if nome_medicao == energia_ativa_importada or energia_ativa_exportada:
+                energia_ativa = medicao * 10e9* 1000 + medicao * 10e3 + (medicao /1000)
+            
+            if nome_medicao == energia_reativa_importada or energia_reativada_exportada:
+                energia_reativa = medicao * 10e9* 1000 + medicao * 10e3 + (medicao /1000)
+            
 
         # Debug
         print("{}, {} {}: {}".format(nome_medicao, tipo, i, medicao))
