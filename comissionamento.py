@@ -24,14 +24,15 @@ MEDIDOR_CONFIG =
     "potencia_B": 111,
     "potencia_C": 112,
     "potencia_total": 113,
+    "potencia_reativa_total": 117
     "fator_potencia_A":122,
     "fator_potencia_B": 123,
     "fator_potencia_C": 124,
     "fator_potencia_T": 125,
     "frequencia": 126,
-    "energia_ativa_importada": 127, 
-    "energia_reativa_importada": 130,
-    "energia_ativa_exportada":133
+    "energia_ativa_importada": 128, 
+    "energia_reativa_importada": 131,
+    "energia_ativa_exportada":134
 }
 
 #Dicionario inversor
@@ -68,10 +69,15 @@ def collect_generico(tipo, comissionamento, i):
     file = open("{tipo}{}.txt".format(i), "a")
     file.write("{}, ".format(date_now()))
 
-    config = MEDIDOR_CONFIG if tipo == "Medidores" else INVERSOR_CONFIG
-
-    for nome_medicao, registrador in config.items():
-        medicao = medidor.read_float(registrador, 3, 2)
+    config = MEDIDOR_CONFIG if tipo == "medidores" else INVERSOR_CONFIG
+    
+    if nome_medicao == energia_diaria or energia_total or energia_parcial or energia_mensal:
+        for nome_medicao, registrador in config.items():
+            medicao = medidor.read_long(registrador, 3, 2)
+    
+    else: 
+            for nome_medicao, registrador in config.items():
+            medicao = medidor.read_float(registrador, 3, 2)
 
         # Debug
         print("{}, {} {}: {}".format(nome_medicao, tipo, i, medicao))
