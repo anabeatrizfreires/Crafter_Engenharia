@@ -10,7 +10,7 @@ NUMERO_DE_COMISSIONAMENTOS = 19
 ENDERECO_INICIAL_MEDIDORES = 201
 ENDERECO_INICIAL_INVERSORES = 301
 
-#dicionario medidor
+#Dicionario medidor
 MEDIDOR_CONFIG =
 {
     "tensao_AB":103,
@@ -34,7 +34,7 @@ MEDIDOR_CONFIG =
     "energia_ativa_exportada":133
 }
 
-#dicionario inversor
+#Dicionario inversor
 INVERSOR_CONFIG = 
 {
     "energia_diaria": 132,
@@ -63,7 +63,7 @@ def date_now():
     today = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
     return str(today)
 
-#gera arquivo para cada equipamento
+#Gera arquivo para cada equipamento no formato definido
 def collect_generico(tipo, comissionamento, i):
     file = open("{tipo}{}.txt".format(i), "a")
     file.write("{}, ".format(date_now()))
@@ -81,6 +81,7 @@ def collect_generico(tipo, comissionamento, i):
     file.write("\n")
     file.close()
 
+#Loop responsável pela comunicação do modbus
 for i in range(1, NUMERO_DE_COMISSIONAMENTOS+1):
     # Criação dos medidores
     medidor = minimalmodbus.Instrument('/dev/ttyUSB0', i, 'rtu')
@@ -107,7 +108,7 @@ for i in range(1, NUMERO_DE_COMISSIONAMENTOS+1):
 
     inversores.append(inversor)
 
-
+#Realiza a comunicação 
 while True:
 
     for i, medidor in enumerate(medidores):
