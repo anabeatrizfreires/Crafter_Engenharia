@@ -33,6 +33,7 @@ MEDIDOR_CONFIG =
     "energia_ativa_importada": 128, 
     "energia_reativa_importada": 131,
     "energia_ativa_exportada":134
+    "energia_reativa_exportada": 136
 }
 
 #Dicionario inversor
@@ -43,8 +44,8 @@ INVERSOR_CONFIG =
     "energia_parcial": 136,
     "energia_mensal": 140
     "tensao_rede": 144,
-    "corrente_rede": 146,
-    "potencia_rede": 148,
+    "corrente_AC": 146,
+    "potencia_AC": 148,
     "frequencia": 150,
     "potencia_1": 152,
     "tensao_1": 154,
