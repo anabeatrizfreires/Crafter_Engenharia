@@ -9,9 +9,11 @@ import os
 NUMERO_DE_COMISSIONAMENTOS = 19
 ENDERECO_INICIAL_MEDIDORES = 201
 ENDERECO_INICIAL_INVERSORES = 301
-vir = #valor referencia corrente
-vfr = #valor referencia tensao
-vpr = #valor referencia potencia
+vir = 1 #valor referencia corrente
+vfr = 230 #valor referencia tensao
+vpr = 1000 #valor referencia potencia
+FORMULA_CONVERSAO_MEDIDORES = (medicao * VR)/16384
+FORMULA_CONVERSAO_ENERGIA = medicao * 10e9 * 1000 + medicao * 10e3 + (medicao /1000)
 
 #Dicionario medidor
 MEDIDOR_CONFIG =
@@ -84,25 +86,30 @@ def collect_generico(tipo, comissionamento, i):
             medicao = medidor.read_float(registrador, 3, 2)
             
             if nome_medicao == tensao_AB or tensao_BC or tensao_CA:
-                tensao_fase_fase = (medicao * vfr)/16384
+                VR = vfr
+                tensao_fase_fase = FORMULA_CONVERSAO_MEDIDORES
                 
             if nome_medicao == corrente_A or corrente_B or corrente_C or corrente_neutro:
-                corrente =  (medicao * vir)/16384
+                VR = vir
+                corrente = FORMULA_CONVERSAO_MEDIDORES
                 
             if nome_medicao == potencia_A or potencia_B or potencia_C or potencia_total:
-                potencia = (medicao * vpr)/16384
+                VR = vpr
+                potencia = FORMULA_CONVERSAO_MEDIDORES
                 
             if nome_medicao == fator_potencia_A or fator_potencia_B or fator_potencia_C or fator_potencia_total:
-                potencia = (medicao * 1)/16384
+                VR = 1 
+                fator_potencia = FORMULA_CONVERSAO_MEDIDORES
                 
             if nome_medicao == frequencia:
-                frequence = (medicao * 100)/16384
+                VR = 100
+                frequence = FORMULA_CONVERSAO_MEDIDORES
              
             if nome_medicao == energia_ativa_importada or energia_ativa_exportada:
-                energia_ativa = medicao * 10e9* 1000 + medicao * 10e3 + (medicao /1000)
+                energia_ativa = FORMULA_CONVERSAO_ENERGIA
             
             if nome_medicao == energia_reativa_importada or energia_reativada_exportada:
-                energia_reativa = medicao * 10e9* 1000 + medicao * 10e3 + (medicao /1000)
+                energia_reativa = FORMULA_CONVERSAO_ENERGIA
             
 
         # Debug
