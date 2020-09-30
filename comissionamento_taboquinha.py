@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import time
 import datetime
 import minimalmodbus
@@ -9,14 +10,7 @@ import os
 NUMERO_DE_COMISSIONAMENTOS = 9
 ENDERECO_INICIAL_MEDIDORES = 201
 
-MEDIDOR_CONFIG =
-{
-    "corrente_A": 13,
-    "corrente_B": 15,
-    "corrente_C": 17,
-    "potencia_total": 65,
-    "energia_ativa_importada": 804, 
-}
+MEDIDOR_CONFIG = { 'corrente_A': 13, 'corrente_B': 15, 'corrente_C': 17, 'potencia_total': 65, 'energia_ativa_importada': 804}
 
 medidores = []
 
@@ -26,20 +20,20 @@ def date_now():
     return str(today)
 
 def collect_generico(tipo, comissionamento, i):
-    file = open("{tipo}{}.txt".format(i), "a")
+    file = open("{}{}.txt".format(tipo, i), "a")
     file.write("{}, ".format(date_now()))
     
+    config = MEDIDOR_CONFIG
+    if tipo == "Medidor":
     for nome_medicao, registrador in config.items():
         medicao = medidor.read_float(registrador, 3, 2)
-        # Debug
         print("{}, {} {}: {}".format(nome_medicao, tipo, i, medicao))
-        
         file.write("{}, ".format(medicao))
     
     file.write("\n")
     file.close()
     
-for i in range(1, NUMERO_DE_COMISSIONAMENTOS+1):
+for i in range(1, NUMERO_DE_COMISSIONAMENTOS):
     
     # Criação dos medidores
     
