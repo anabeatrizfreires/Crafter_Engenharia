@@ -34,7 +34,7 @@ def collect_generico(tipo, comissionamento, i):
     file.write("\n")
     file.close()
     
-for i in range(1, NUMERO_DE_COMISSIONAMENTOS + 1):
+for i in range(1, NUMERO_DE_COMISSIONAMENTOS):
     
     # Criação dos medidores
     
@@ -54,4 +54,4 @@ while True:
         collect_generico("Medidor", medidor, i)
         time.sleep(0.5)
 
-    time.sleep(60*1)
+    time.sleep(60*6)
