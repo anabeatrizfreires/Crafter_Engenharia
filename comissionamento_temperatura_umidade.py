@@ -20,7 +20,7 @@ def date_now():
     return str(today)
 
 def collect_generico(tipo, comissionamento, i):
-    file = open("{tipo}{}.txt".format(i), "a")
+    file = open("{}{}.txt".format(tipo, i), "a")
     file.write("{}, ".format(date_now()))
 
     config = MEDIDOR_CONFIG
