@@ -27,7 +27,7 @@ def collect_generico(tipo, comissionamento, i):
     file.write("{}, ".format(date_now()))
     
     for nome_medicao, registrador in config.items():
-        medicao = medidor.read_float(registrador, 3, 2)
+        medicao = medidor.read_registers(registrador, 1, 3)
         # Debug
         print("{}, {} {}: {}".format(nome_medicao, tipo, i, medicao))
         
