@@ -24,16 +24,17 @@ def collect_generico(tipo, comissionamento, i):
     file.write("{}, ".format(date_now()))
 
     config = MEDIDOR_CONFIG
-    if tipo == "medidores":
+    if tipo == "Medidor":
         for nome_medicao, registrador in config.items():
             medicao = medidor.read_registers(registrador, 1, 3)
+            medicao = medicao[0]/10
             print("{}, {}: {}".format(nome_medicao, tipo, i, medicao))
             file.write("{}, ".format(medicao))
     
     file.write("\n")
     file.close()
     
-for i in range(1, NUMERO_DE_COMISSIONAMENTOS+1):
+for i in range(1, NUMERO_DE_COMISSIONAMENTOS + 1):
     
     # Criação dos medidores
     
@@ -43,7 +44,7 @@ for i in range(1, NUMERO_DE_COMISSIONAMENTOS+1):
     medidor.serial.parity = serial.PARITY_NONE
     medidor.serial.stopbits = 1
     medidor.serial.timeout = 100.0
-    medidor.address = ENDERECO_INICIAL_MEDIDORES + i
+    medidor.address = ENDERECO_INICIAL_MEDIDORES
     medidor.mode = minimalmodbus.MODE_RTU
     
     medidores.append(medidor)
@@ -53,4 +54,4 @@ while True:
         collect_generico("Medidor", medidor, i)
         time.sleep(0.5)
 
-    time.sleep(60*6)
+    time.sleep(60*1)
