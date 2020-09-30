@@ -12,56 +12,19 @@ ENDERECO_INICIAL_INVERSORES = 301
 vir = 1 #valor referencia corrente
 vfr = 230 #valor referencia tensao
 vpr = 1000 #valor referencia potencia
-FORMULA_CONVERSAO_MEDIDORES = (medicao * VR)/16384
-FORMULA_CONVERSAO_ENERGIA = medicao * 10e9 * 1000 + medicao * 10e3 + (medicao /1000)
+FORMULA_CONVERSAO_MEDIDORES = (medicao[0] * VR)/16384
+FORMULA_CONVERSAO_ENERGIA = medicao[0] * 10e9 * 1000 + medicao [0] * 10e3 + (medicao /1000)
 
 #Dicionario medidor
-MEDIDOR_CONFIG =
-{
-    "tensao_AB":103,
-    "tensao_BC": 104,
-    "tensao_CA": 105,
-    "corrente_A": 106,
-    "corrente_B": 107,
-    "corrente_C": 108,
-    "corrente_neutro": 109,
-    "potencia_A": 110,
-    "potencia_B": 111,
-    "potencia_C": 112,
-    "potencia_total": 113,
-    "potencia_reativa_total": 117
-    "fator_potencia_A":122,
-    "fator_potencia_B": 123,
-    "fator_potencia_C": 124,
-    "fator_potencia_T": 125,
-    "frequencia": 126,
-    "energia_ativa_importada": 128, 
-    "energia_reativa_importada": 131,
-    "energia_ativa_exportada":134
-    "energia_reativa_exportada": 136
-}
+MEDIDOR_CONFIG = {'tensao_AB':103, 'tensao_BC': 104, 'tensao_CA': 105, 'corrente_A': 106, 'corrente_B': 107, 'corrente_C': 108, 'corrente_neutro': 109, 
+                  'potencia_A': 110, 'potencia_B': 111, 'potencia_C': 112, 'potencia_total': 113, 'potencia_reativa_total': 117, 'fator_potencia_A':122,
+                  'fator_potencia_B': 123, 'fator_potencia_C': 124, 'fator_potencia_T': 125, 'frequencia': 126, 'energia_ativa_importada': 128,
+                  'energia_reativa_importada': 131, 'energia_ativa_exportada':134, 'energia_reativa_exportada': 136}
 
 #Dicionario inversor
-INVERSOR_CONFIG = 
-{
-    "energia_diaria": 132,
-    "energia_total": 134,
-    "energia_parcial": 136,
-    "energia_mensal": 140
-    "tensao_rede": 144,
-    "corrente_AC": 146,
-    "potencia_AC": 148,
-    "frequencia": 150,
-    "potencia_1": 152,
-    "tensao_1": 154,
-    "corrente_1": 156,
-    "potencia_2": 158,
-    "tensao_2": 160,
-    "corrente_2": 162,
-    "temperatura": 164,
-    "resistencia_isolacao": 168
-    
-}
+INVERSOR_CONFIG = { 'energia_diaria': 132, 'energia_total': 134, 'energia_parcial': 136, 'energia_mensal': 140, 'tensao_rede': 144, 'corrente_A': 146,
+                   'potencia_AC' 148, 'frequencia': 150, 'potencia_1': 152, 'tensao_1': 154, 'corrente_1': 156, 'potencia_2': 158, 'tensao_2': 160,
+                    'corrente_2': 162, 'temperatura': 164, 'resistencia_isolacao': 168}
 
 medidores = []
 inversores = []
@@ -72,10 +35,10 @@ def date_now():
 
 #Gera arquivo para cada equipamento no formato definido
 def collect_generico(tipo, comissionamento, i):
-    file = open("{tipo}{}.txt".format(i), "a")
+    file = open("{}{}.txt".format(tipo, i), "a")
     file.write("{}, ".format(date_now()))
 
-    config = MEDIDOR_CONFIG if tipo == "medidores" else INVERSOR_CONFIG
+    config = MEDIDOR_CONFIG if tipo == "Medidor" else INVERSOR_CONFIG
     
     if nome_medicao == energia_diaria or energia_total or energia_parcial or energia_mensal:
         for nome_medicao, registrador in config.items():
@@ -121,7 +84,7 @@ def collect_generico(tipo, comissionamento, i):
     file.close()
 
 #Loop responsável pela comunicação do modbus
-for i in range(1, NUMERO_DE_COMISSIONAMENTOS+1):
+for i in range(1, NUMERO_DE_COMISSIONAMENTOS):
     # Criação dos medidores
     medidor = minimalmodbus.Instrument('/dev/ttyUSB0', i, 'rtu')
 
