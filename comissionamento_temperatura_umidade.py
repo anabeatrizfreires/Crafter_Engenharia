@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import time
 import datetime
 import minimalmodbus
@@ -9,11 +10,7 @@ import os
 NUMERO_DE_COMISSIONAMENTOS = 1
 ENDERECO_INICIAL_MEDIDORES = 25
 
-MEDIDOR_CONFIG =
-{
-    "temperatura": 7,
-    "umidade": 8 
-}
+MEDIDOR_CONFIG = {'temperatura': 7, 'umidade': 8}
 
 medidores = []
 
@@ -25,13 +22,13 @@ def date_now():
 def collect_generico(tipo, comissionamento, i):
     file = open("{tipo}{}.txt".format(i), "a")
     file.write("{}, ".format(date_now()))
-    
-    for nome_medicao, registrador in config.items():
-        medicao = medidor.read_registers(registrador, 1, 3)
-        # Debug
-        print("{}, {} {}: {}".format(nome_medicao, tipo, i, medicao))
-        
-        file.write("{}, ".format(medicao))
+
+    config = MEDIDOR_CONFIG
+    if tipo == "medidores":
+        for nome_medicao, registrador in config.items():
+            medicao = medidor.read_registers(registrador, 1, 3)
+            print("{}, {}: {}".format(nome_medicao, tipo, i, medicao))
+            file.write("{}, ".format(medicao))
     
     file.write("\n")
     file.close()
@@ -47,7 +44,7 @@ for i in range(1, NUMERO_DE_COMISSIONAMENTOS+1):
     medidor.serial.stopbits = 1
     medidor.serial.timeout = 100.0
     medidor.address = ENDERECO_INICIAL_MEDIDORES + i
-    medidor.mode = minimalmodbus.MODE_RT
+    medidor.mode = minimalmodbus.MODE_RTU
     
     medidores.append(medidor)
     
