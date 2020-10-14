@@ -8,7 +8,7 @@ import os
 
 # Configuração
 NUMERO_DE_COMISSIONAMENTOS = 19
-ENDERECO_INICIAL_MEDIDORES = 1
+ENDERECO_INICIAL_MEDIDORES = 101
 ENDERECO_INICIAL_INVERSORES = 1
 vir = 1 #valor referencia corrente
 vfr = 230 #valor referencia tensao
