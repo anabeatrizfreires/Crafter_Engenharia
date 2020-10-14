@@ -42,40 +42,40 @@ def collect_generico(tipo, comissionamento, i):
     config = MEDIDOR_CONFIG if tipo == "Medidor" else INVERSOR_CONFIG
     
     for nome_medicao, registrador in config.items():
-      if nome_medicao == estado_alarme:
+      if nome_medicao == 'estado_alarme':
           medicao = medidor.read_register(registrador, 3, 2)
           if medicao == 64:
              print("Fusivel queimado.")
 
-      elif nome_medicao == energia_diaria or energia_total or energia_parcial or energia_mensal:
+      elif nome_medicao == 'energia_diaria' or 'energia_total' or 'energia_parcial' or 'energia_mensal':
             medicao = medidor.read_long(registrador, 3, 2)
       else: 
             medicao = medidor.read_float(registrador, 3, 2)
             
-            if nome_medicao == tensao_AB or tensao_BC or tensao_CA:
+            if nome_medicao == 'tensao_AB' or 'tensao_BC' or 'tensao_CA':
                   VR = vfr
                   medicao = FORMULA_CONVERSAO_MEDIDORES
 
-             if nome_medicao == corrente_A or corrente_B or corrente_C or corrente_neutro:
+             if nome_medicao == 'corrente_A' or 'corrente_B' or 'corrente_C' or 'corrente_neutro':
                   VR = vir
                    medicao = FORMULA_CONVERSAO_MEDIDORES
 
-              if nome_medicao == potencia_A or potencia_B or potencia_C or potencia_total:
+              if nome_medicao == 'potencia_A' or 'potencia_B' or 'potencia_C' or 'potencia_total':
                   VR = vpr
                    medicao = FORMULA_CONVERSAO_MEDIDORES
 
-              if nome_medicao == fator_potencia_A or fator_potencia_B or fator_potencia_C or fator_potencia_total:
+              if nome_medicao == 'fator_potencia_A' or 'fator_potencia_B' or 'fator_potencia_C' or 'fator_potencia_total':
                   VR = 1 
                    medicao = FORMULA_CONVERSAO_MEDIDORES
 
-              if nome_medicao == frequencia:
+              if nome_medicao == 'frequencia':
                   VR = 100
                    medicao = FORMULA_CONVERSAO_MEDIDORES
 
-              if nome_medicao == energia_ativa_importada or energia_ativa_exportada:
+              if nome_medicao == 'energia_ativa_importada' or 'energia_ativa_exportada':
                    medicao = FORMULA_CONVERSAO_ENERGIA
 
-              if nome_medicao == energia_reativa_importada or energia_reativada_exportada:
+              if nome_medicao == 'energia_reativa_importada' or 'energia_reativada_exportada':
                    medicao = FORMULA_CONVERSAO_ENERGIA
             
 
