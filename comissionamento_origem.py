@@ -44,6 +44,9 @@ def collect_generico(tipo, comissionamento, i):
     if nome_medicao == estado_alarme:
       for nome_medicao, registrador in config.items():
         medicao = medidor.read_register(registrador, 3, 2)
+        if medicao == 64:
+          print("Fusivel queimado.")
+          
         
     if nome_medicao == energia_diaria or energia_total or energia_parcial or energia_mensal:
         for nome_medicao, registrador in config.items():
