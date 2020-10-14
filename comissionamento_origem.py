@@ -41,26 +41,22 @@ def collect_generico(tipo, comissionamento, i):
 
     config = MEDIDOR_CONFIG if tipo == "Medidor" else INVERSOR_CONFIG
     
-    if nome_medicao == estado_alarme:
-      for nome_medicao, registrador in config.items():
-        medicao = medidor.read_register(registrador, 3, 2)
-        if medicao == 64:
-          print("Fusivel queimado.")
-          
-        
-    if nome_medicao == energia_diaria or energia_total or energia_parcial or energia_mensal:
-        for nome_medicao, registrador in config.items():
+    for nome_medicao, registrador in config.items():
+      if nome_medicao == estado_alarme:
+          medicao = medidor.read_register(registrador, 3, 2)
+          if medicao == 64:
+             print("Fusivel queimado.")
+
+      elif nome_medicao == energia_diaria or energia_total or energia_parcial or energia_mensal:
             medicao = medidor.read_long(registrador, 3, 2)
-    
-    else: 
-            for nome_medicao, registrador in config.items():
-              medicao = medidor.read_float(registrador, 3, 2)
+      else: 
+            medicao = medidor.read_float(registrador, 3, 2)
             
-              if nome_medicao == tensao_AB or tensao_BC or tensao_CA:
+            if nome_medicao == tensao_AB or tensao_BC or tensao_CA:
                   VR = vfr
                   medicao = FORMULA_CONVERSAO_MEDIDORES
 
-              if nome_medicao == corrente_A or corrente_B or corrente_C or corrente_neutro:
+             if nome_medicao == corrente_A or corrente_B or corrente_C or corrente_neutro:
                   VR = vir
                    medicao = FORMULA_CONVERSAO_MEDIDORES
 
@@ -89,7 +85,6 @@ def collect_generico(tipo, comissionamento, i):
         file.write("{}, ".format(medicao))
     
     file.write("\n")
-    file.close()
 
 #Loop responsável pela comunicação do modbus
 for i in range(1, NUMERO_DE_COMISSIONAMENTOS):
