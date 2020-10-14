@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import time
 import datetime
 import minimalmodbus
@@ -13,18 +14,18 @@ vir = 1 #valor referencia corrente
 vfr = 230 #valor referencia tensao
 vpr = 1000 #valor referencia potencia
 FORMULA_CONVERSAO_MEDIDORES = (medicao[0] * VR)/16384
-FORMULA_CONVERSAO_ENERGIA = medicao[0] * 10e9 * 1000 + medicao [0] * 10e3 + (medicao /1000)
+FORMULA_CONVERSAO_ENERGIA = medicao[0] * 10e9 * 1000 + medicao [0] * 10e3 + (medicao[0] /1000)
 
 #Dicionario medidor
-MEDIDOR_CONFIG = {'tensao_AB':103, 'tensao_BC': 104, 'tensao_CA': 105, 'corrente_A': 106, 'corrente_B': 107, 'corrente_C': 108, 'corrente_neutro': 109, 
+MEDIDOR_CONFIG = {'tensao_AB': 103, 'tensao_BC': 104, 'tensao_CA': 105, 'corrente_A': 106, 'corrente_B': 107, 'corrente_C': 108, 'corrente_neutro': 109, 
                   'potencia_A': 110, 'potencia_B': 111, 'potencia_C': 112, 'potencia_total': 113, 'potencia_reativa_total': 117, 'fator_potencia_A':122,
                   'fator_potencia_B': 123, 'fator_potencia_C': 124, 'fator_potencia_T': 125, 'frequencia': 126, 'energia_ativa_importada': 128,
                   'energia_reativa_importada': 131, 'energia_ativa_exportada':134, 'energia_reativa_exportada': 136}
 
 #Dicionario inversor
 INVERSOR_CONFIG = { 'energia_diaria': 132, 'energia_total': 134, 'energia_parcial': 136, 'energia_mensal': 140, 'tensao_rede': 144, 'corrente_A': 146,
-                   'potencia_AC' 148, 'frequencia': 150, 'potencia_1': 152, 'tensao_1': 154, 'corrente_1': 156, 'potencia_2': 158, 'tensao_2': 160,
-                    'corrente_2': 162, 'temperatura': 164, 'resistencia_isolacao': 168}
+                   'potencia_AC': 148, 'frequencia': 150, 'potencia_1': 152, 'tensao_1': 154, 'corrente_1': 156, 'potencia_2': 158, 'tensao_2': 160,
+                    'corrente_2': 162, 'temperatura': 164, 'resistencia_isolacao': 168, 'estado_alarme': 1051}
 
 medidores = []
 inversores = []
@@ -40,39 +41,43 @@ def collect_generico(tipo, comissionamento, i):
 
     config = MEDIDOR_CONFIG if tipo == "Medidor" else INVERSOR_CONFIG
     
+    if nome_medicao == estado_alarme:
+      for nome_medicao, registrador in config.items():
+        medicao = medidor.read_register(registrador, 3, 2)
+        
     if nome_medicao == energia_diaria or energia_total or energia_parcial or energia_mensal:
         for nome_medicao, registrador in config.items():
             medicao = medidor.read_long(registrador, 3, 2)
     
     else: 
             for nome_medicao, registrador in config.items():
-            medicao = medidor.read_float(registrador, 3, 2)
+              medicao = medidor.read_float(registrador, 3, 2)
             
-            if nome_medicao == tensao_AB or tensao_BC or tensao_CA:
-                VR = vfr
-                tensao_fase_fase = FORMULA_CONVERSAO_MEDIDORES
-                
-            if nome_medicao == corrente_A or corrente_B or corrente_C or corrente_neutro:
-                VR = vir
-                corrente = FORMULA_CONVERSAO_MEDIDORES
-                
-            if nome_medicao == potencia_A or potencia_B or potencia_C or potencia_total:
-                VR = vpr
-                potencia = FORMULA_CONVERSAO_MEDIDORES
-                
-            if nome_medicao == fator_potencia_A or fator_potencia_B or fator_potencia_C or fator_potencia_total:
-                VR = 1 
-                fator_potencia = FORMULA_CONVERSAO_MEDIDORES
-                
-            if nome_medicao == frequencia:
-                VR = 100
-                frequence = FORMULA_CONVERSAO_MEDIDORES
-             
-            if nome_medicao == energia_ativa_importada or energia_ativa_exportada:
-                energia_ativa = FORMULA_CONVERSAO_ENERGIA
-            
-            if nome_medicao == energia_reativa_importada or energia_reativada_exportada:
-                energia_reativa = FORMULA_CONVERSAO_ENERGIA
+              if nome_medicao == tensao_AB or tensao_BC or tensao_CA:
+                  VR = vfr
+                  medicao = FORMULA_CONVERSAO_MEDIDORES
+
+              if nome_medicao == corrente_A or corrente_B or corrente_C or corrente_neutro:
+                  VR = vir
+                   medicao = FORMULA_CONVERSAO_MEDIDORES
+
+              if nome_medicao == potencia_A or potencia_B or potencia_C or potencia_total:
+                  VR = vpr
+                   medicao = FORMULA_CONVERSAO_MEDIDORES
+
+              if nome_medicao == fator_potencia_A or fator_potencia_B or fator_potencia_C or fator_potencia_total:
+                  VR = 1 
+                   medicao = FORMULA_CONVERSAO_MEDIDORES
+
+              if nome_medicao == frequencia:
+                  VR = 100
+                   medicao = FORMULA_CONVERSAO_MEDIDORES
+
+              if nome_medicao == energia_ativa_importada or energia_ativa_exportada:
+                   medicao = FORMULA_CONVERSAO_ENERGIA
+
+              if nome_medicao == energia_reativa_importada or energia_reativada_exportada:
+                   medicao = FORMULA_CONVERSAO_ENERGIA
             
 
         # Debug
