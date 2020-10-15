@@ -7,7 +7,7 @@ import os
 
 # Configuração
 
-NUMERO_DE_COMISSIONAMENTOS = 9
+NUMERO_DE_COMISSIONAMENTOS = 1
 ENDERECO_INICIAL_MEDIDORES = 201
 
 MEDIDOR_CONFIG = { 'corrente_A': 5022, 'corrente_B': 5023, 'corrente_C': 5024, 'potencia_total': 5031, 'energia_ativa_importada': 13014}
