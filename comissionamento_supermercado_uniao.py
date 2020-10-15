@@ -1,56 +1,56 @@
-# - * - codificação: utf-8 - * -
- tempo de importação
-importar  data e hora
-import  minimalmodbus
-import  serial
-importar  os
+# -*- coding: utf-8 -*-
+import time
+import datetime
+import minimalmodbus
+import serial
+import os
 
 # Configuração
 
-NUMERO_DE_COMISSIONAMENTOS  = 1
-ENDERECO_INICIAL_MEDIDORES  =  201
+NUMERO_DE_COMISSIONAMENTOS = 9
+ENDERECO_INICIAL_MEDIDORES = 201
 
-INVERSOR_CONFIG  = { 'corrente_A' : 13 , 'corrente_B' : 15 , 'corrente_C' : 17 , 'potencia_total' : 65 , 'energia_ativa_importada' : 804 }
+MEDIDOR_CONFIG = { 'corrente_A': 5022, 'corrente_B': 5023, 'corrente_C': 5024, 'potencia_total': 5031, 'energia_ativa_importada': 13014}
 
-inversores  = []
+medidores = []
 
-def  date_now ():
+def date_now():
     
-    hoje  =  data e hora . datetime . agora (). strftime ( "% d-% m-% Y% H:% M" )
-    return  str ( hoje )
+    today = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
+    return str(today)
 
-def  collect_generico ( tipo , comissionamento , i ):
-    arquivo  =  abrir ( "{} {}. txt" . formato ( tipo , i ), "a" )
-    arquivo . write ( "{}," . format ( date_now ()))
+def collect_generico(tipo, comissionamento, i):
+    file = open("{}{}.txt".format(tipo, i), "a")
+    file.write("{}, ".format(date_now()))
     
-    config  =  INVERSOR_CONFIG
-    if  tipo  ==  "Inversor" :
-    para  nome_medicao , registrador  em  config . itens ():
-        medicao  =  medidor . read_float ( registrador , 3 , 2 )
-        print ( "{}, {} {}: {}" . format ( nome_medicao , tipo , i , medicao ))
-        arquivo . escrever ( "{}," . formato ( medicao ))
+    config = MEDIDOR_CONFIG
+    if tipo == "Medidor":
+    for nome_medicao, registrador in config.items():
+        medicao = medidor.read_float(registrador, 3, 2)
+        print("{}, {} {}: {}".format(nome_medicao, tipo, i, medicao))
+        file.write("{}, ".format(medicao))
     
-    arquivo . escrever ( " \ n " )
-    arquivo . fechar ()
+    file.write("\n")
+    file.close()
     
-para  i  no  intervalo ( 1 , NUMERO_DE_COMISSIONAMENTOS ):
+for i in range(1, NUMERO_DE_COMISSIONAMENTOS):
     
     # Criação dos medidores
     
-    inversor  =  minimalmodbus . Instrumento ( '/ dev / ttyUSB0' , i , 'rtu' )
-    inversor . serial . baudrate  =  9600
-    inversor . serial . bytesize  =  8
-    inversor . serial . paridade  =  serial . PARITY_NONE
-    inversor . serial . stopbits  =  1
-    inversor . serial . tempo limite  =  100,0
-    inversor . endereço  =  ENDERECO_INICIAL_MEDIDORES  +  i
-    inversor . modo  =  minimalmodbus . MODE_RT
+    medidor = minimalmodbus.Instrument('/dev/ttyUSB0', i, 'rtu')
+    medidor.serial.baudrate = 9600
+    medidor.serial.bytesize = 8
+    medidor.serial.parity = serial.PARITY_NONE
+    medidor.serial.stopbits = 1
+    medidor.serial.timeout = 100.0
+    medidor.address = ENDERECO_INICIAL_MEDIDORES + i
+    medidor.mode = minimalmodbus.MODE_RT
     
-    medidores . anexar ( medidor )
+    medidores.append(medidor)
     
-enquanto  verdadeiro :
-    para  i , inversor  em  enumerar ( inversores ):
-        collect_generico ( "Inversor" , inversor , i )
-        tempo . dormir ( 0,5 )
+while True:
+    for i, medidor in enumerate(medidores):
+        collect_generico("Medidor", medidor, i)
+        time.sleep(0.5)
 
-    tempo . dormir ( 60 * 6 )
+    time.sleep(60*6)
