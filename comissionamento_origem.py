@@ -8,7 +8,6 @@ import os
 
 # Configuração
 NUMERO_DE_COMISSIONAMENTOS = 19
-ENDERECO_INICIAL_MEDIDORES = 101
 ENDERECO_INICIAL_INVERSORES = 1
 VIR = 1 #valor referencia corrente
 VFR = 230 #valor referencia tensao
@@ -26,7 +25,6 @@ MEDIDOR_CONFIG = {'tensao_AB': 103, 'tensao_BC': 104, 'tensao_CA': 105, 'corrent
 INVERSOR_CONFIG = { 'energia_diaria': 132, 'energia_total': 134, 'energia_parcial': 136, 'energia_mensal': 140, 'tensao_rede': 144, 'corrente_A': 146,
                    'potencia_AC': 148, 'frequencia': 150, 'potencia_1': 152, 'tensao_1': 154, 'corrente_1': 156, 'potencia_2': 158, 'tensao_2': 160,
                     'corrente_2': 162, 'temperatura': 164, 'resistencia_isolacao': 168, 'estado_alarme': 1051}
-
 medidores = []
 inversores = []
 
@@ -42,53 +40,43 @@ def collect_generico(tipo, comissionamento, i):
     config = MEDIDOR_CONFIG if tipo == "Medidor" else INVERSOR_CONFIG
     
     for nome_medicao, registrador in config.items():
-      if nome_medicao == 'estado_alarme':
-          medicao = medidor.read_register(registrador, 3, 2)
-          if medicao == 64:
-             print("Fusivel queimado.")
-
-      elif nome_medicao == 'energia_diaria' or 'energia_total' or 'energia_parcial' or 'energia_mensal':
-            medicao = medidor.read_long(registrador, 3, 2)
-      else: 
-            medicao = medidor.read_float(registrador, 3, 2)
-            
-            if nome_medicao == 'tensao_AB' or 'tensao_BC' or 'tensao_CA':
-                  VR = VFR
-                  medicao = FORMULA_CONVERSAO_MEDIDORES
-
-             if nome_medicao == 'corrente_A' or 'corrente_B' or 'corrente_C' or 'corrente_neutro':
-                  VR = VIR
-                   medicao = FORMULA_CONVERSAO_MEDIDORES
-
-              if nome_medicao == 'potencia_A' or 'potencia_B' or 'potencia_C' or 'potencia_total':
-                  VR = VPR
-                   medicao = FORMULA_CONVERSAO_MEDIDORES
-
-              if nome_medicao == 'fator_potencia_A' or 'fator_potencia_B' or 'fator_potencia_C' or 'fator_potencia_total':
-                  VR = 1 
-                   medicao = FORMULA_CONVERSAO_MEDIDORES
-
-              if nome_medicao == 'frequencia':
-                  VR = 100
-                   medicao = FORMULA_CONVERSAO_MEDIDORES
-
-              if nome_medicao == 'energia_ativa_importada' or 'energia_ativa_exportada':
-                   medicao = FORMULA_CONVERSAO_ENERGIA
-
-              if nome_medicao == 'energia_reativa_importada' or 'energia_reativada_exportada':
-                   medicao = FORMULA_CONVERSAO_ENERGIA
-            
-
-        # Debug
-        print("{}, {} {}: {}".format(nome_medicao, tipo, i, medicao))
+        if nome_medicao == 'estado_alarme':
+            medicao = medidor.read_register(registrador, 3, 2)
+            if medicao == 64:
+                print("Fusivel queimado.")
+            elif nome_medicao == 'energia_diaria' or 'energia_total' or 'energia_parcial' or 'energia_mensal':
+                medicao = medidor.read_long(registrador, 3, 2)
+            else: 
+                medicao = medidor.read_float(registrador, 3, 2)
+                if nome_medicao == 'tensao_AB' or 'tensao_BC' or 'tensao_CA':
+                    VR = VFR
+                    medicao = FORMULA_CONVERSAO_MEDIDORES
+                if nome_medicao == 'corrente_A' or 'corrente_B' or 'corrente_C' or 'corrente_neutro':
+                    VR = VIR
+                    medicao = FORMULA_CONVERSAO_MEDIDORES
+                if nome_medicao == 'potencia_A' or 'potencia_B' or 'potencia_C' or 'potencia_total':
+                    VR = VPR
+                    medicao = FORMULA_CONVERSAO_MEDIDORES
+                if nome_medicao == 'fator_potencia_A' or 'fator_potencia_B' or 'fator_potencia_C' or 'fator_potencia_total':
+                    VR = 1 
+                    medicao = FORMULA_CONVERSAO_MEDIDORES
+                if nome_medicao == 'frequencia':
+                    VR = 100
+                    medicao = FORMULA_CONVERSAO_MEDIDORES
+                if nome_medicao == 'energia_ativa_importada' or 'energia_ativa_exportada':
+                    medicao = FORMULA_CONVERSAO_ENERGIA
+                if nome_medicao == 'energia_reativa_importada' or 'energia_reativada_exportada':
+                    medicao = FORMULA_CONVERSAO_ENERGIA
+    # Debug
+    print("{}, {} {}: {}".format(nome_medicao, tipo, i, medicao))
         
-        file.write("{}, ".format(medicao))
+    file.write("{}, ".format(medicao))
     
     file.write("\n")
 
 #Loop responsável pela comunicação do modbus
 for i in range(1, NUMERO_DE_COMISSIONAMENTOS):
-    # Criação dos medidores
+# Criação dos medidores
     medidor = minimalmodbus.Instrument('/dev/ttyUSB0', i, 'rtu')
 
     medidor.serial.baudrate = 9600
@@ -102,8 +90,8 @@ for i in range(1, NUMERO_DE_COMISSIONAMENTOS):
     medidores.append(medidor)
 
     # Criação dos inversores
-    inversor = minimalmodbus.Instrument('/dev/ttyUSB0', i, 'rtu')
-    inversor.serial.baudrate = 9600
+    inversor = minimalmodbus.Instrument('/dev/ttyUSB1', i, 'rtu')
+    inversor.serial.baudrate = 19200
     inversor.serial.bytesize = 8
     inversor.serial.parity = serial.PARITY_NONE
     inversor.serial.stopbits = 1
