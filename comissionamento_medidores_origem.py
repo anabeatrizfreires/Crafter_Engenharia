@@ -39,7 +39,6 @@ def date_now():
 
 def hour():
     hour = datetime.datetime.now().strftime("%H")
-    print (str(hour)+ ' ------------------------------------------------------')
     return(str(hour))
 
 def write_to_csv1(tensaoA, tensaoB, tensaoC, tensaoAB, tensaoBC, tensaoCA, correnteA, correnteB, correnteC, correnteneutro, frequencia):
