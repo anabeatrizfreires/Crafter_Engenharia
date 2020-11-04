@@ -16,7 +16,7 @@ TENSAO_LINHA_LINHA_MAX = 418
 TENSAO_LINHA_NEUTRO_MIN = 198
 TENSAO_LINHA_NEUTRO_MAX = 242
 CORRENTE_MIN = 0.5
-CORRENETE_NEUTRO_MINIMO = 5
+CORRENETE_NEUTRO_MAX = 5
 FREQUENCIA_MIN = 59.5
 FREQUENCIA_MAX = 60.5
 
@@ -87,7 +87,7 @@ def alarmes (tensaoA, tensaoB, tensaoC, tensaoAB, tensaoBC, tensaoCA, correnteA,
         logger_alarmes.write (date_now() + "," + 'Frequencia: ' + str(frequencia*CONVERSAO_FREQUENCIA) + "\n")
         logger_alarmes.close()
 
-    if correnteneutro*CONVERSAO_CORRENTE < CORRENTE_NEUTRO_MIN:
+    if correnteneutro*CONVERSAO_CORRENTE > CORRENTE_NEUTRO_MAX:
         logger_alarmes = open ("datalogger_medidores_alarmes.txt", "a")
         logger_alarmes.write (date_now() + "," + 'CorrentaN: ' + str(correnteneutro*CONVERSAO_CORRENTE) + "\n")
         logger_alarmes.close()
