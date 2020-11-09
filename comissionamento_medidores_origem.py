@@ -168,7 +168,7 @@ while True:
     corrente1 = RHT485.read_register(106,0,3)
     corrente2 = RHT485.read_register(107,0,3)
     corrente3 = RHT485.read_register(108,0,3)
-    correnteN = RHT485.read_register(113,0,3)
+    correnteN = RHT485.read_register(109,0,3)
     potencia_W_1 = RHT485.read_register(110,0,3)
     potencia_W_2 = RHT485.read_register(111,0,3)
     potencia_W_3 = RHT485.read_register(112,0,3) 
