@@ -67,7 +67,7 @@ def collect_generico(tipo, comissionamento, i):
                 medicao = medicao*CONVERSAO_FREQUENCIA
                 print('Frequencia: ', medicao)
             
-            logger.write("{}, ".format(medicao))
+        logger.write("{}, ".format(medicao))
         logger.write("\n")
         logger.close()
 
@@ -91,4 +91,4 @@ while True:
         collect_generico("Medidor", medidor, i)
         time.sleep(0.5)
 
-    time.sleep(60*1)
+    time.sleep(60*6)
