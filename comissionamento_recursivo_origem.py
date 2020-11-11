@@ -29,8 +29,8 @@ def date_now():
 
 def collect_generico(tipo, comissionamento, i):
 
-    file = open("{}{}.txt".format(tipo, i), "a")
-    file.write("{}, ".format(date_now()))
+    logger = open("{}{}.txt".format(tipo, i), "a")
+    logger.write("{}, ".format(date_now()))
 
     config = MEDIDOR_CONFIG
     if tipo == "Medidor":
@@ -40,30 +40,36 @@ def collect_generico(tipo, comissionamento, i):
             #Leitura tensao           
             if registrador >= 100 and registrador <=105:
                 medicao = medicao*CONVERSAO_TENSAO
+                print('Tensao: ', medicao)
 
+            #Leitura corrente
             if registrador >= 106 and registrador <=109:
                 medicao = medicao*CONVERSAO_CORRENTE
+                print('Corrente: ', medicao)
 
             #Leitura potencia
             if registrador >= 110 and registrador <=121 and registrador != 113:
                 medicao = medicao*CONVERSAO_POTENCIA
+                print('Potencia: ', medicao)
 
             #Leitura potencial total
             if registrador == 113:
                 medicao = medicao*CONVERSAO_POTENCIA_TOTAL
+                print('Potencia Total: ', medicao)
 
             #Leitura fator de potencia
             if registrador >= 122 and registrador <=125:
                 medicao = medicao*CONVERSAO_FATOR_POTENCIA
-            
+                print('Fator de Potencia: ', medicao)
+
             #Leitura frequencia
             if registrador == 126:
                 medicao = medicao*CONVERSAO_FREQUENCIA
-
-            print("{}, {}: {}".format(nome_medicao, tipo, i, medicao))
-            file.write("{}, ".format(medicao))
-    file.write("\n")
-    file.close()
+                print('Frequencia: ', medicao)
+            
+            logger.write("{}, ".format(medicao))
+        logger.write("\n")
+        logger.close()
 
 for i in range(1, NUMERO_DE_COMISSIONAMENTOS + 1):
     
