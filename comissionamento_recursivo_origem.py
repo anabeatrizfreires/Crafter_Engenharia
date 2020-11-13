@@ -35,39 +35,86 @@ def collect_generico(tipo, comissionamento, i):
     config = MEDIDOR_CONFIG
     if tipo == "Medidor":
         for nome_medicao, registrador in config.items():
-            medicao = comissionamento.read_register(registrador, 0, 3)
-
+        
             #Leitura tensao           
             if registrador >= 100 and registrador <=105:
-                medicao = medicao*CONVERSAO_TENSAO
-                print('Tensao: ', medicao)
+                medicao = comissionamento.read_register(registrador, 0, 3)
+                valorV = medicao*CONVERSAO_TENSAO
+                logger.write("{}, ".format (valorV))
+                print('Tensao: ', valorV)
 
             #Leitura corrente
             if registrador >= 106 and registrador <=109:
-                medicao = medicao*CONVERSAO_CORRENTE
-                print('Corrente: ', medicao)
+                medicao = comissionamento.read_register(registrador, 0, 3)
+                valorC = medicao*CONVERSAO_CORRENTE
+                logger.write("{}, ".format(valorC))
+                print('Corrente: ', valorC)
 
             #Leitura potencia
             if registrador >= 110 and registrador <=121 and registrador != 113:
-                medicao = medicao*CONVERSAO_POTENCIA
-                print('Potencia: ', medicao)
+                medicao = comissionamento.read_register(registrador, 0, 3)
+                valorP = medicao*CONVERSAO_POTENCIA
+                logger.write("{}, ".format(valorP))
+                print('Potencia: ', valorP)
 
             #Leitura potencial total
             if registrador == 113:
-                medicao = medicao*CONVERSAO_POTENCIA_TOTAL
-                print('Potencia Total: ', medicao)
+                medicao = comissionamento.read_register(registrador, 0, 3)
+                valorPT = medicao*CONVERSAO_POTENCIA_TOTAL
+                logger.write("{}, ".format(valorPT))
+                print('Potencia Total: ', valorPT)
 
             #Leitura fator de potencia
             if registrador >= 122 and registrador <=125:
-                medicao = medicao*CONVERSAO_FATOR_POTENCIA
-                print('Fator de Potencia: ', medicao)
+                medicao = comissionamento.read_register(registrador, 0, 3)
+                valorFP = medicao*CONVERSAO_FATOR_POTENCIA
+                logger.write("{}, ".format(valorFP))
+                print('Fator de Potencia: ', valorFP)
 
             #Leitura frequencia
             if registrador == 126:
-                medicao = medicao*CONVERSAO_FREQUENCIA
-                print('Frequencia: ', medicao)
-            
-        logger.write("{}, ".format(medicao))
+                medicao = comissionamento.read_register(registrador, 0, 3)
+                valorF = medicao*CONVERSAO_FREQUENCIA
+                logger.write("{}, ".format(valorF))
+                print('Frequencia: ', valorF)
+
+            #Leitura energia ativa importada
+            if registrador == 128:
+                medicao = comissionamento.read_register(registrador, 0, 3)
+                energia_ativa_importada_MWh = comissionamento.read_register(127,0,3)
+                energia_ativa_importada_Wh = comissionamento.read_register(129,0,3)
+                valor_E_A_I = ((energia_ativa_importada_MWh*1000) + (medicao + (energia_ativa_importada_Wh/1000)))
+                logger.write("{}, ".format(valor_E_A_I))
+                print('Energia Ativa Importada: ', valor_E_A_I)   
+
+            #Leitura energia reativa importada
+            if registrador == 131:
+                medicao = comissionamento.read_register(registrador, 0, 3)
+                energia_reativa_importada_MWh = comissionamento.read_register(127,0,3)
+                energia_reativa_importada_Wh = comissionamento.read_register(129,0,3)
+                valor_E_R_I = ((energia_reativa_importada_MWh*1000) + (medicao + (energia_reativa_importada_Wh/1000)))
+                logger.write("{}, ".format(valor_E_R_I))
+                print('Energia Reativa Importada: ', valor_E_R_I)   
+
+            #Leitura energia ativa exportada
+            if registrador == 134:
+                medicao = comissionamento.read_register(registrador, 0, 3)
+                energia_ativa_exportada_MWh = comissionamento.read_register(127,0,3)
+                energia_ativa_exportada_Wh = comissionamento.read_register(129,0,3)
+                valor_E_A_E = ((energia_ativa_exportada_MWh*1000) + (medicao + (energia_ativa_exportada_Wh/1000)))
+                logger.write("{}, ".format(valor_E_A_E))
+                print('Energia Ativa Exportada: ', valor_E_A_E)   
+
+            #Leitura energia reativa exportada
+            if registrador == 137:
+                medicao = comissionamento.read_register(registrador, 0, 3)
+                energia_reativa_exportada_MWh = comissionamento.read_register(127,0,3)
+                energia_reativa_exportada_Wh = comissionamento.read_register(129,0,3)
+                valor_E_R_E = ((energia_reativa_exportada_MWh*1000) + (medicao + (energia_reativa_exportada_Wh/1000)))
+                logger.write("{}, ".format(valor_E_R_E))
+                print('Energia Retiva Exportada: ', valor_E_R_E)      
+
+
         logger.write("\n")
         logger.close()
 
