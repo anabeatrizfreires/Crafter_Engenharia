@@ -90,8 +90,8 @@ def collect_generico(tipo, comissionamento, i):
             #Leitura energia reativa importada
             if registrador == 131:
                 medicao = comissionamento.read_register(registrador, 0, 3)
-                energia_reativa_importada_MWh = comissionamento.read_register(127,0,3)
-                energia_reativa_importada_Wh = comissionamento.read_register(129,0,3)
+                energia_reativa_importada_MWh = comissionamento.read_register(130,0,3)
+                energia_reativa_importada_Wh = comissionamento.read_register(132,0,3)
                 valor_E_R_I = ((energia_reativa_importada_MWh*1000) + (medicao + (energia_reativa_importada_Wh/1000)))
                 logger.write("{}, ".format(valor_E_R_I))
                 print('Energia Reativa Importada: ', valor_E_R_I)   
@@ -99,8 +99,8 @@ def collect_generico(tipo, comissionamento, i):
             #Leitura energia ativa exportada
             if registrador == 134:
                 medicao = comissionamento.read_register(registrador, 0, 3)
-                energia_ativa_exportada_MWh = comissionamento.read_register(127,0,3)
-                energia_ativa_exportada_Wh = comissionamento.read_register(129,0,3)
+                energia_ativa_exportada_MWh = comissionamento.read_register(133,0,3)
+                energia_ativa_exportada_Wh = comissionamento.read_register(135,0,3)
                 valor_E_A_E = ((energia_ativa_exportada_MWh*1000) + (medicao + (energia_ativa_exportada_Wh/1000)))
                 logger.write("{}, ".format(valor_E_A_E))
                 print('Energia Ativa Exportada: ', valor_E_A_E)   
@@ -108,8 +108,8 @@ def collect_generico(tipo, comissionamento, i):
             #Leitura energia reativa exportada
             if registrador == 137:
                 medicao = comissionamento.read_register(registrador, 0, 3)
-                energia_reativa_exportada_MWh = comissionamento.read_register(127,0,3)
-                energia_reativa_exportada_Wh = comissionamento.read_register(129,0,3)
+                energia_reativa_exportada_MWh = comissionamento.read_register(136,0,3)
+                energia_reativa_exportada_Wh = comissionamento.read_register(138,0,3)
                 valor_E_R_E = ((energia_reativa_exportada_MWh*1000) + (medicao + (energia_reativa_exportada_Wh/1000)))
                 logger.write("{}, ".format(valor_E_R_E))
                 print('Energia Retiva Exportada: ', valor_E_R_E)      
