@@ -6,6 +6,7 @@ import os
 import math
 import smtplib
 from email.mime.text import MIMEText
+import functools
 
 smtp_ssl_host = 'smtp.gmail.com'
 smtp_ssl_port = 465
@@ -41,7 +42,7 @@ CORRENTE_NEUTRO_MAX = 500
 FREQUENCIA_MIN = 59.5
 FREQUENCIA_MAX = 60.5
 
-alarmes = []
+
 
 def date_now():
     today = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
@@ -62,26 +63,30 @@ def write_to_csv1(tensaoA, tensaoB, tensaoC, tensaoAB, tensaoBC, tensaoCA, corre
 
 def escrita_alarmes(tensaoA, tensaoB, tensaoC, tensaoAB, tensaoBC, tensaoCA, correnteA, correnteB, correnteC, correnteneutro, frequencia, potencia_ativa_A, potencia_ativa_B, potencia_ativa_C, potencia_ativa_total, potencia_reativa_A, potencia_reativa_B, potencia_reativa_C, potencia_reativa_total, potencia_aparente_A, potencia_aparente_B, potencia_aparente_C, potencia_aparente_total, fator_potencia_A, fator_potencia_B, fator_potencia_C, fator_potencia_total, energia_at_imp_MWh, energia_at_imp, energia_at_imp_Wh, energia_re_imp_MWh, energia_re_imp, energia_re_imp_Wh, energia_at_exp_MWh, energia_at_exp, energia_at_exp_Wh, energia_re_exp_MWh, energia_re_exp, energia_re_exp_Wh, end_medidor):
 
+    alarmes = []
 
     if tensaoA*CONVERSAO_TENSAO_NEUTRO > TENSAO_FASE_NEUTRO_MAX or tensaoA*CONVERSAO_TENSAO_NEUTRO < TENSAO_FASE_NEUTRO_MIN:
         logger_alarmes = open ("Medidor{}_Alarme_Tensao.txt".format(end_medidor), "a")
-        logger_alarmes.write (date_now() + ";" + 'TensaoA: ' + str(tensaoA*CONVERSAO_TENSAO_NEUTRO))
+        log = date_now() + ";" + 'Medidor ' + str (end_medidor) + ";" + 'TensaoA: '+ str(tensaoA*CONVERSAO_TENSAO_NEUTRO) + "\n"
+        logger_alarmes.write(log)
         logger_alarmes.close()
-        alarmes.append("tensaoA", tensaoA*CONVERSAO_TENSAO_NEUTRO)
+        alarmes.append(log)
 
 
     if tensaoB*CONVERSAO_TENSAO_NEUTRO > TENSAO_FASE_NEUTRO_MAX or tensaoB*CONVERSAO_TENSAO_NEUTRO < TENSAO_FASE_NEUTRO_MIN:
         logger_alarmes = open ("Medidor{}_Alarme_Tensao.txt".format(end_medidor), "a")
-        logger_alarmes.write (date_now() + ";" + 'TensaoB: '+ str(tensaoB*CONVERSAO_TENSAO_NEUTRO) + "\n")
+        log = date_now() + ";" + 'Medidor ' + str (end_medidor) + ";"  + 'TensaoB: '+ str(tensaoB*CONVERSAO_TENSAO_NEUTRO) + "\n"
+        logger_alarmes.write(log)
         logger_alarmes.close()
-        alarmes.append("tensaoB", tensaoB*CONVERSAO_TENSAO_NEUTRO )
+        alarmes.append(log)
 
 
     if tensaoC*CONVERSAO_TENSAO_NEUTRO > TENSAO_FASE_NEUTRO_MAX or tensaoC*CONVERSAO_TENSAO_NEUTRO < TENSAO_FASE_NEUTRO_MIN:
         logger_alarmes = open ("Medidor{}_Alarme_Tensao.txt".format(end_medidor), "a")
-        logger_alarmes.write (date_now() + ";" + 'TensaoC: '+ str(tensaoC*CONVERSAO_TENSAO_NEUTRO) + "\n")
+        log = date_now() + ";" + 'Medidor ' + str (end_medidor) + ";" + 'TensaoC: '+ str(tensaoC*CONVERSAO_TENSAO_NEUTRO) + "\n"
+        logger_alarmes.write(log)
         logger_alarmes.close()
-        alarmes.append("tensaoC", tensaoC*CONVERSAO_TENSAO_NEUTRO)
+        alarmes.append(log)
     
     if tensaoAB*CONVERSAO_TENSAO_FASE_FASE > TENSAO_FASE_FASE_MAX or tensaoAB*CONVERSAO_TENSAO_FASE_FASE < TENSAO_FASE_FASE_MIN:
         logger_alarmes = open ("Medidor{}_Alarme_Tensao.txt".format(end_medidor), "a")
@@ -154,25 +159,28 @@ def escrita_alarmes(tensaoA, tensaoB, tensaoC, tensaoAB, tensaoBC, tensaoCA, cor
 
         if correnteA*CONVERSAO_CORRENTE < CORRENTE_MIN:
             logger_alarmes = open ("Medidor{}_Alarme_Corrente_Neutro.txt".format(end_medidor), "a")
-            logger_alarmes.write (date_now() + ";" + 'CorrentaA: ' + str(correnteA*CONVERSAO_CORRENTE) + "\n")
+            log = (date_now() + ";" + 'Medidor ' + str (end_medidor) + ";" + 'CorrentaA: ' + str(correnteA*CONVERSAO_CORRENTE) + "\n")
+            logger_alarmes.write(log)
             logger_alarmes.close()
-            alarmes.append("correnteA", correnteA*CONVERSAO_CORRENTE)
+            alarmes.append(log)
 
         if correnteB*CONVERSAO_CORRENTE < CORRENTE_MIN:
             logger_alarmes = open ("Medidor{}_Alarme_Corrente_Neutro.txt".format(end_medidor), "a")
-            logger_alarmes.write (date_now() + ";" + 'CorrentaB: ' + str(correnteB*CONVERSAO_CORRENTE) + "\n")
+            log = (date_now() + ";" + 'Medidor ' + str (end_medidor) + ";" + 'CorrentaB: ' + str(correnteB*CONVERSAO_CORRENTE) + "\n")
+            logger_alarmes.write(log)
             logger_alarmes.close()
-            alarmes.append("correnteB", correnteB*CONVERSAO_CORRENTE)
+            alarmes.append(log)
 
         if correnteC*CONVERSAO_CORRENTE < CORRENTE_MIN:
             logger_alarmes = open ("Medidor{}_Alarme_Corrente_Neutro.txt".format(end_medidor), "a")
-            logger_alarmes.write (date_now() + ";" + 'CorrentaC: ' + str(correnteC*CONVERSAO_CORRENTE) + "\n")
+            log = (date_now() + ";"  + 'Medidor ' + str (end_medidor)  + 'CorrentaC: ' + str(correnteC*CONVERSAO_CORRENTE) + "\n")
+            logger_alarmes.write(log)
             logger_alarmes.close()
-            alarmes.append("correnteC", correnteC*CONVERSAO_CORRENTE)
+            alarmes.append(log)
 
         if alarmes:
 
-            message = MIMEText (alarmes)
+            message = MIMEText ('\n'.join(alarmes))
             message ['subject'] = 'Alarme(s) Origem'
             message ['from'] = from_addr
             message ['to'] = ', '.join(to_addrs)
